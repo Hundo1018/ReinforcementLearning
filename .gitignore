@@ -348,18 +348,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-0ForTestAIByMaze/0ForTestAIByMaze/TEST.sln
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/App.config
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/ClassDiagram1.cd
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Form1.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Form1.Designer.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Form1.resx
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/MazeExplorer.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Program.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/TEST.csproj
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Properties/AssemblyInfo.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Properties/Resources.Designer.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Properties/Resources.resx
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Properties/Settings.Designer.cs
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/Properties/Settings.settings
-0ForTestAIByMaze/0ForTestAIByMaze/TEST/ReinforcementLearning/NN.dll
