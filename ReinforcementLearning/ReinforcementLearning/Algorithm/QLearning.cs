@@ -80,10 +80,10 @@ namespace ReinforcementLearning.Algorithm
             //0.5 * x *(1- y) = 1
             //
 
-            actions.Sort((x, y) => { return (x.Value - y.Value) < 0 ? -1 : 1; });
+            actions.Sort((x, y) => { return (x._value - y._value) < 0 ? -1 : 1; });
             actions = MinMaxNormalization(actions);
             double random = new Random().NextDouble();
-            double total = actions.Sum(x => x.Value);
+            double total = actions.Sum(x => x._value);
             for (int i = 0; i < actions.Count; i++)
             {
 

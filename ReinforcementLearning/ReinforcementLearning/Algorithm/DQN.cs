@@ -8,6 +8,7 @@ namespace ReinforcementLearning.Algorithm
 {
     class DQN : ILearningAlgorithm
     {
+
         public ActionSpace.Action ChooseAction(State currentState)
         {
             throw new NotImplementedException();
@@ -21,6 +22,10 @@ namespace ReinforcementLearning.Algorithm
         public double Learn(State currentState, ActionSpace.Action action, State nextState, double reward, bool isTerminal)
         {
             throw new NotImplementedException();
+        }
+        public DQN()
+        {
+
         }
     }
 }

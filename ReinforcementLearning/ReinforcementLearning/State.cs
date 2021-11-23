@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HundoMatrix;
+
 namespace ReinforcementLearning
 {
     /// <summary>
@@ -10,57 +12,120 @@ namespace ReinforcementLearning
     /// </summary>
     public class State
     {
-        
-        double _positionX, _positionY;
-        public double PositionX { get => _positionX; set { _positionX = value; } }
-        public double PositionY { get => _positionY; set { _positionY = value; } }
-        public int X { get => (int)_positionX; set { _positionX = value; } }
-        public int Y { get => (int)_positionY; set { _positionY = value; } }
-
-        public State(int x, int y)
-        {
-            PositionX = x;
-            PositionY = y;
-        }
-        public State(double x, double y)
-        {
-            PositionX = x;
-            PositionY = y;
-        }
+        public double[,] Value { get => _value; set => _value = value; }
+        private Matrix _value;
         public static State operator +(State state, State state1)
         {
-            return new State(state.PositionX + state1.PositionX, state.PositionY + state1.PositionY);
+            return new State(state._value + state1._value);
         }
-        public static bool operator ==(State state, State state1)
-        {
-            return (state.PositionX == state1.PositionX) && (state.PositionY == state1.PositionY);
-        }
-        public static bool operator !=(State state, State state1)
-        {
-            return (state.PositionX != state1.PositionX) || (state.PositionY != state1.PositionY);
-        }
+        //public static bool operator ==(State state, State state1)
+        //{
+        //    return state._value == state1._value;
+        //}
+        //public static bool operator !=(State state, State state1)
+        //{
+        //    return state._value != state1._value;
+        //}
         public static State operator -(State state, State state1)
         {
-            return new State(state.X - state1.X, state.Y - state1.Y);
+            return new State(state._value - state._value);
         }
-        public double GetDistance(State state)
+        public static State operator *(State state, State state1)
         {
-            return Math.Sqrt(Math.Pow(this.PositionX - state.PositionX, 2) + Math.Pow(this.PositionY - state.PositionY, 2));
+            return new State(state._value * state1._value);
         }
 
+        /// <summary>
+        /// 取得曼哈頓距離
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public double ManhattanDistance(State state)
+        {
+            return _value.ManhattanDistance(state._value);
+        }
 
+        /// <summary>
+        /// 取得歐幾里得距離
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public double GetEuclideanDistance(State state)
+        {
+            return _value.EuclideanDistance(state._value);
+        }
+
+        /// <summary>
+        /// 判斷是否相等
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is State state &&
+                   EqualityComparer<Matrix>.Default.Equals(_value, state._value);
+        }
+
+        /// <summary>
+        /// 取得雜湊值
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return -1755142420 + EqualityComparer<Matrix>.Default.GetHashCode(_value);
+        }
+
+        private State(Matrix matrix)
+        {
+            _value = matrix;
+        }
+        public State()
+        {
+            _value = new Matrix();
+        }
+
+        public State(double[,] vs)
+        {
+            _value = new Matrix(vs);
+        }
+
+        public State(params double[] vs)
+        {
+            _value = new Matrix(vs);
+        }
+
+        public State(int n, int m)
+        {
+            _value = new Matrix(n, m);
+        }
+
+        public override string ToString()
+        {
+            return _value.ToString();
+        }
     }
     public class StateComparer : IEqualityComparer<State>
     {
-        public bool Equals(State x, State y)
+        /// <summary>
+        /// 兩數值相等
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public bool Equals(State a, State b)
         {
-            return (x.PositionX == y.PositionX) && (x.PositionY == y.PositionY);
+            return a.Value == b.Value;
         }
 
+        /// <summary>
+        /// 取得雜湊值
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int GetHashCode(State obj)
         {
-            return obj.PositionX.GetHashCode() ^ obj.PositionY.GetHashCode();
+            return obj.Value.GetHashCode();
         }
+        
     }
-    // TODO:State存Vector，並使用array作為結構使用dimention來定義長度，並包含向量的各種運算
 }
