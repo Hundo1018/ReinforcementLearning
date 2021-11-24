@@ -14,7 +14,7 @@ namespace ReinforcementLearning
         /// </summary>
         /// <param name="currentState">當前狀態</param>
         /// <returns>選出的動作</returns>
-        ActionSpace.Action ChooseAction(State currentState);
+        DiscreteActionSpace.Action ChooseAction(State currentState);
 
         /// <summary>
         /// 透過獎勵學習
@@ -24,7 +24,7 @@ namespace ReinforcementLearning
         /// <param name="nextState">下一個狀態</param>
         /// <param name="reward">獎勵</param>
         /// <returns>Q值</returns>
-        double Learn(State currentState, ActionSpace.Action action, State nextState, double reward, bool isTerminal);
+        double Learn(State currentState, DiscreteActionSpace.Action action, State nextState, double reward, bool isTerminal);
         
         /// <summary>
         /// 在當下的狀態中選出一個動作
@@ -32,6 +32,7 @@ namespace ReinforcementLearning
         /// <param name="currentState">當前狀態</param>
         /// <param name="epsilon">epsilon 1:全隨機, epsilon 0:選最大</param>
         /// <returns></returns>
-        ActionSpace.Action ChooseAction(State currentState, double epsilon);
+        DiscreteActionSpace.Action ChooseAction(State currentState, double epsilon);
+
     }
 }

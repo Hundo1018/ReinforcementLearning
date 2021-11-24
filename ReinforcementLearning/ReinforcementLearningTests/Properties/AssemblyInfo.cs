@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("ReinforcementLearningTests1")]
+[assembly: AssemblyTitle("ReinforcementLearningTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ReinforcementLearningTests1")]
+[assembly: AssemblyProduct("ReinforcementLearningTests")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 下列 GUID 為專案公開 (Expose) 至 COM 時所要使用的 typelib ID
-[assembly: Guid("9511bb6a-ee99-4891-8ac6-f0dbd75408b7")]
+[assembly: Guid("07a16ba0-e564-4b23-a56e-ca040c5f5a70")]
 
 // 組件的版本資訊由下列四個值所組成: 
 //

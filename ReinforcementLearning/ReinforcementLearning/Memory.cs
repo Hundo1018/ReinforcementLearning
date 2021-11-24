@@ -9,11 +9,11 @@ namespace ReinforcementLearning
     public class Memory
     {
         public State State0 { get; set; }
-        public ActionSpace.Action Action { get; set; }
+        public DiscreteActionSpace.Action Action { get; set; }
         public double Reward { get; set; }
         public State State1 { get; set; }
         public bool IsTerminal { get; set; }
-        public Memory(State state0, ActionSpace.Action action, double reward, State state1)
+        public Memory(State state0, DiscreteActionSpace.Action action, double reward, State state1)
         {
             State0 = state0;
             Action = action;

@@ -8,7 +8,7 @@ using HundoMatrix;
 namespace ReinforcementLearning
 {
     /// <summary>
-    /// 表示一個同個時間下的狀態
+    /// 表示一個同個時間下的狀態，將Matrix包裝成Vector來使用
     /// </summary>
     public class State
     {
@@ -75,6 +75,14 @@ namespace ReinforcementLearning
             return -1755142420 + EqualityComparer<Matrix>.Default.GetHashCode(_value);
         }
 
+
+        public double this[int index]
+        {
+            get { return _value[index]; }
+            set { _value[index] = value; }
+        }
+        
+
         private State(Matrix matrix)
         {
             _value = matrix;
@@ -103,6 +111,13 @@ namespace ReinforcementLearning
         {
             return _value.ToString();
         }
+
+        public static implicit operator double[](State state) => state._value;
+
+        public static implicit operator double[,](State state) => state._value;
+
+        public static implicit operator List<double>(State state) => state._value;
+
     }
     public class StateComparer : IEqualityComparer<State>
     {

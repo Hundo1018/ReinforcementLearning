@@ -8,9 +8,9 @@ namespace ReinforcementLearning
 {
 
     /// <summary>
-    /// 動作空間
+    /// 離散動作空間
     /// </summary>
-    public static class ActionSpace
+    public static class DiscreteActionSpace
     {
         public enum Action
         {
@@ -34,5 +34,6 @@ namespace ReinforcementLearning
                 return Enum.GetValues(typeof(Action)).Cast<Action>().ToArray();
             }
         }
+
     }
 }

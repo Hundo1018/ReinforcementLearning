@@ -8,7 +8,7 @@ namespace ReinforcementLearning
 {
     public class Agent
     {
-        public delegate State Transition();
+        //public delegate State Transition();
         public State CurrentState { get; set; }
         public int BatchSize { get; set; }
         private ILearningAlgorithm _learningAlgorithm;
@@ -22,7 +22,7 @@ namespace ReinforcementLearning
         /// 選擇動作
         /// </summary>
         /// <returns></returns>
-        public ActionSpace.Action ChooseAction(double epsilon)
+        public DiscreteActionSpace.Action ChooseAction(double epsilon)
         {
             return _learningAlgorithm.ChooseAction(CurrentState, epsilon);
         }
@@ -52,6 +52,10 @@ namespace ReinforcementLearning
             }
             return result;
         }
+
+        /// <summary>
+        /// 忘掉多餘的記憶
+        /// </summary>
         private void Forget()
         {
             //這裡應該要把不重要的去掉，而不是只刪頭
@@ -59,11 +63,13 @@ namespace ReinforcementLearning
                 batchMemories.RemoveAt(0);
         }
 
+        /// <summary>
+        /// 學習，更新參數
+        /// </summary>
         public void Learn()
         {
             if (batchMemories.Count < BatchSize)
                 return;
-            //這
 
             Random random = new Random();
             /*for (int i = 0; i < batchMemories.Count; i++)
@@ -73,10 +79,12 @@ namespace ReinforcementLearning
                 batchMemories[i] = batchMemories[j];
                 batchMemories[j] = memory;
             }*/
+            //打亂
             batchMemories.Sort((x, y) => { return random.Next(); });
-            for (int i = 0; i < batchMemories.Count / 3; i++)
+            for (int i = 0; i < batchMemories.Count / 1; i++)
             {
                 _learningAlgorithm.Learn(batchMemories[i].State0, batchMemories[i].Action, batchMemories[i].State1, batchMemories[i].Reward, batchMemories[i].IsTerminal);
+                
             }
 
         }

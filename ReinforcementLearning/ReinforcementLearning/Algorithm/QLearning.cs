@@ -8,7 +8,7 @@ namespace ReinforcementLearning.Algorithm
 {
     public class QLearning : ILearningAlgorithm
     {
-        private Dictionary<State, Dictionary<ActionSpace.Action, double>> _qTable;
+        private Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>> _qTable;
         private double _learningRate;
         private double _discountFactor;
         /// <summary>
@@ -16,9 +16,9 @@ namespace ReinforcementLearning.Algorithm
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        private ActionSpace.Action GetMaxAction(State state)
+        private DiscreteActionSpace.Action GetMaxAction(State state)
         {
-            KeyValuePair<ActionSpace.Action, double> maxPair = _qTable[state].First();
+            KeyValuePair<DiscreteActionSpace.Action, double> maxPair = _qTable[state].First();
             var actions = _qTable[state];
             foreach (var actionPair in actions)
                 if (actionPair.Value >= maxPair.Value)
@@ -45,7 +45,7 @@ namespace ReinforcementLearning.Algorithm
         /// </summary>
         /// <param name="currentState"></param>
         /// <returns></returns>
-        ActionSpace.Action ILearningAlgorithm.ChooseAction(State currentState)
+        DiscreteActionSpace.Action ILearningAlgorithm.ChooseAction(State currentState)
         {
             return GetMaxAction(currentState);
         }
@@ -55,40 +55,14 @@ namespace ReinforcementLearning.Algorithm
         /// <param name="currentState"></param>
         /// <param name="epsilon">有多少機率會歪出最高Q值以外的動作</param>
         /// <returns></returns>
-        ActionSpace.Action ILearningAlgorithm.ChooseAction(State currentState, double epsilon)
+        DiscreteActionSpace.Action ILearningAlgorithm.ChooseAction(State currentState, double epsilon)
         {
             double randomNumber = new Random().NextDouble();
             if (randomNumber < epsilon)
             {
-                return (ActionSpace.Action)new Random().Next(0, ActionSpace.Length);
+                return (DiscreteActionSpace.Action)new Random().Next(0, DiscreteActionSpace.Length);
             }
             return GetMaxAction(currentState);
-
-            //以下撰寫非0非1的時候如何處理
-
-
-            /*
-            //取得動作list
-            List<KeyValuePair<ActionSpace.Action, double>> actions = _qTable[currentState].ToList();
-            //基礎機率是平均的
-            double baseProb = 1d / actions.Count;
-
-            0的話，會讓最大的數值放到滿
-            1的話，會讓所有數值等於0.25
-            //排序
-
-            //0.5 * x *(1- y) = 1
-            //
-
-            actions.Sort((x, y) => { return (x._value - y._value) < 0 ? -1 : 1; });
-            actions = MinMaxNormalization(actions);
-            double random = new Random().NextDouble();
-            double total = actions.Sum(x => x._value);
-            for (int i = 0; i < actions.Count; i++)
-            {
-
-            }
-            */
         }
 
         /// <summary>
@@ -99,39 +73,47 @@ namespace ReinforcementLearning.Algorithm
         /// <param name="nextState"></param>
         /// <param name="reward"></param>
         /// <returns></returns>
-        double ILearningAlgorithm.Learn(State currentState, ActionSpace.Action action, State nextState, double reward, bool isTerminal)
+        double ILearningAlgorithm.Learn(State currentState, DiscreteActionSpace.Action action, State nextState, double reward, bool isTerminal)
         {
-            double newQ = 0;
-            newQ = (1 - _learningRate) * _qTable[currentState][action] + _learningRate * (reward + _discountFactor * (isTerminal ? 1 : GetMaxQ(nextState)));
+            double newQ;
+            double evaluationQ = _qTable[currentState][action];
+            double targetQ = _learningRate * (reward + _discountFactor * (isTerminal ? 1 : GetMaxQ(nextState)));
+            newQ = (1 - _learningRate) * evaluationQ + targetQ;
             _qTable[currentState][action] = newQ;
             return newQ;
+            /*
+            double newQ;
+            double evaluationQ = _qTable[currentState][action];
+            double targetQ = reward + _discountFactor * (isTerminal ? 1 : GetMaxQ(nextState));
+            newQ = evaluationQ + _learningRate * (targetQ - evaluationQ);
+            return newQ;
+            */
         }
 
 
         public QLearning()
         {
-            _qTable = new Dictionary<State, Dictionary<ActionSpace.Action, double>>(new StateComparer());
+            _qTable = new Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>>(new StateComparer());
         }
         public QLearning(double learningRate, double discountFactor) : this()
         {
             _learningRate = learningRate;
             _discountFactor = discountFactor;
-
-
         }
 
         public void SetEnvironment(int[,] maze, int xLimit, int yLimit, bool isRandomInit)
         {
-            _qTable = new Dictionary<State, Dictionary<ActionSpace.Action, double>>(new StateComparer());
+
+            _qTable = new Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>>(new StateComparer());
             Random random = new Random();
-            ActionSpace.Action[] actions = ActionSpace.Values;
+            DiscreteActionSpace.Action[] actions = DiscreteActionSpace.Values;
 
             for (int y = -1; y <= yLimit + 1; y++)
             {
                 for (int x = -1; x <= xLimit + 1; x++)
                 {
                     State state = new State(x, y);
-                    Dictionary<ActionSpace.Action, double> acitonValues = new Dictionary<ActionSpace.Action, double>();
+                    Dictionary<DiscreteActionSpace.Action, double> acitonValues = new Dictionary<DiscreteActionSpace.Action, double>();
                     if (isRandomInit)
                         foreach (var action in actions)
                             acitonValues.Add(action, random.NextDouble());
