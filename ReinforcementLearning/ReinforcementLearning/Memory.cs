@@ -24,5 +24,20 @@ namespace ReinforcementLearning
         {
 
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Memory)
+            {
+                Memory otherObject = (Memory)obj;
+                return State0 == otherObject.State0 && State1 == otherObject.State1;
+            }
+            return false;
+        }
+
+        public override string ToString()
+        {
+            return State0.ToString() + ',' + Action.ToString() + ',' + Reward.ToString() + ',' + State1.ToString();
+        }
     }
 }

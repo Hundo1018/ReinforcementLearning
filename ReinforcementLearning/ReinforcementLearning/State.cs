@@ -14,6 +14,7 @@ namespace ReinforcementLearning
     {
         public double[,] Value { get => _value; set => _value = value; }
         private Matrix _value;
+        protected Matrix GetMatrix{get=>_value;}
         public static State operator +(State state, State state1)
         {
             return new State(state._value + state1._value);
@@ -50,7 +51,7 @@ namespace ReinforcementLearning
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        public double GetEuclideanDistance(State state)
+        public double EuclideanDistance(State state)
         {
             return _value.EuclideanDistance(state._value);
         }
@@ -72,7 +73,7 @@ namespace ReinforcementLearning
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return -1755142420 + EqualityComparer<Matrix>.Default.GetHashCode(_value);
+            return _value.GetHashCode();
         }
 
 
@@ -118,7 +119,7 @@ namespace ReinforcementLearning
 
         public static implicit operator List<double>(State state) => state._value;
 
-    }
+    }/*
     public class StateComparer : IEqualityComparer<State>
     {
         /// <summary>
@@ -139,8 +140,8 @@ namespace ReinforcementLearning
         /// <returns></returns>
         public int GetHashCode(State obj)
         {
-            return obj.Value.GetHashCode();
+            return obj.GetHashCode();
         }
         
-    }
+    }*/
 }

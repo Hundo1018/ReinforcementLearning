@@ -14,11 +14,7 @@ namespace ReinforcementLearning.Algorithm
     {
         private double _learningRate;
         private double _discountFactor;
-
-        /// <summary>
-        /// 這個網路存放 狀態=>Action的Q值
-        /// </summary>
-        public INeuralNetwork NN { get; set; }
+        private INeuralNetwork neuralNetwork;
 
         /// <summary>
         /// 當下狀態下最大Q值的index
@@ -50,33 +46,33 @@ namespace ReinforcementLearning.Algorithm
             if (new Random().NextDouble() < epsilon)
                 return (DiscreteActionSpace.Action)new Random().Next(0, DiscreteActionSpace.Length);
 
-            List<double> results = NN.GetResult(currentState);
+            List<double> results = neuralNetwork.GetResult(currentState);
             return (DiscreteActionSpace.Action)MaxArg(results);
         }
 
         public double Learn(State currentState, DiscreteActionSpace.Action action, State nextState, double reward, bool isTerminal)
         {
             double newQ;
-            double evaluationQ = NN.GetResult(currentState)[(int)action];
-            List<double> nextResults = NN.GetResult(nextState);
+            double evaluateQ = neuralNetwork.GetResult(currentState)[(int)action];
+            List<double> nextResults = neuralNetwork.GetResult(nextState);
             double targetQ = reward + _discountFactor * (isTerminal ? 1 : nextResults[MaxArg(nextResults)]);
-            newQ = evaluationQ + _learningRate * (targetQ - evaluationQ);
+            newQ = Math.Pow( evaluateQ + _learningRate * (targetQ - evaluateQ),2);
             List<double> labels = new List<double>();
             for (int i = 0; i < DiscreteActionSpace.Length; i++)
             {
                 labels.Add(0);
             }
             labels[(int)action] = newQ;
-            NN.SetTrainingData(new List<List<double>>() { currentState }, new List<List<double>>() { labels });
-            NN.StartTrain(1);
+            neuralNetwork.SetTrainingData(new List<List<double>>() { currentState }, new List<List<double>>() { labels });
+            neuralNetwork.StartTrain(1);
             return newQ;
 
 
             //
 
             /*double newQ;
-            List<double> currentQ = NN.GetResult(currentState);
-            List<double> nextQ = NN.GetResult(nextState);
+            List<double> currentQ = neuralNetwork.GetResult(currentState);
+            List<double> nextQ = neuralNetwork.GetResult(nextState);
             int nextMaxArg = MaxArg(nextQ);
             newQ = currentQ[(int)action] +_learningRate * (reward + _discountFactor * (isTerminal ? 1 : nextQ[nextMaxArg]));
             List<double> lables = new List<double>();
@@ -86,8 +82,8 @@ namespace ReinforcementLearning.Algorithm
             }
             lables[(int)action] = newQ;
 
-            NN.SetTrainingData(new List<List<double>>() { currentState }, new List<List<double>>() { lables });
-            NN.StartTrain(1);
+            neuralNetwork.SetTrainingData(new List<List<double>>() { currentState }, new List<List<double>>() { lables });
+            neuralNetwork.StartTrain(1);
             return newQ;
             */
         }
@@ -100,7 +96,7 @@ namespace ReinforcementLearning.Algorithm
         }
         public DQN(INeuralNetwork nn, double learningRate, double discountFactor):this(learningRate,discountFactor)
         {
-            NN = nn;
+            neuralNetwork = nn;
         }
         public DQN(INeuralNetwork nn) : this(nn, 0.001, 0.9)
         {

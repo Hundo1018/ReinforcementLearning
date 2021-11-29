@@ -93,7 +93,7 @@ namespace ReinforcementLearning.Algorithm
 
         public QLearning()
         {
-            _qTable = new Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>>(new StateComparer());
+            _qTable = new Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>>(/*new StateComparer()*/);
         }
         public QLearning(double learningRate, double discountFactor) : this()
         {
@@ -104,7 +104,7 @@ namespace ReinforcementLearning.Algorithm
         public void SetEnvironment(int[,] maze, int xLimit, int yLimit, bool isRandomInit)
         {
 
-            _qTable = new Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>>(new StateComparer());
+            _qTable = new Dictionary<State, Dictionary<DiscreteActionSpace.Action, double>>(/*new StateComparer()*/);
             Random random = new Random();
             DiscreteActionSpace.Action[] actions = DiscreteActionSpace.Values;
 
@@ -112,7 +112,7 @@ namespace ReinforcementLearning.Algorithm
             {
                 for (int x = -1; x <= xLimit + 1; x++)
                 {
-                    State state = new State(x, y);
+                    State state = new State(new double[] { x, y });
                     Dictionary<DiscreteActionSpace.Action, double> acitonValues = new Dictionary<DiscreteActionSpace.Action, double>();
                     if (isRandomInit)
                         foreach (var action in actions)

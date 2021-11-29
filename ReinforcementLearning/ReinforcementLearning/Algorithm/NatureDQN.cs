@@ -11,8 +11,19 @@ namespace ReinforcementLearning.Algorithm
     /// </summary>
     class NatureDQN : ILearningAlgorithm
     {
+        /// <summary>
+        /// 目標網路，
+        /// </summary>
+        INeuralNetwork targetNet;
+        /// <summary>
+        /// 評估網路、估計網路，計算當下狀態所獲得的各個動作的QValue
+        ///  並且隨時更新
+        /// </summary>
+        INeuralNetwork evaluateNet;
+
         public DiscreteActionSpace.Action ChooseAction(State currentState)
         {
+
             throw new NotImplementedException();
         }
 
