@@ -92,13 +92,19 @@ namespace ReinforcementLearning
         {
 
         }
-        
+
         /// <summary>
         /// 打亂
         /// </summary>
         public void Shuffle()
         {
-            _transitions.Sort((x, y) => _random.Next(-1, 0));
+            for (int i = 0; i < _transitions.Count(); i++)
+            {
+                int j = _random.Next(0, _transitions.Count());
+                Transition temp = _transitions[i];
+                _transitions[i] = _transitions[j];
+                _transitions[j] = temp;
+            }
         }
 
         /// <summary>
