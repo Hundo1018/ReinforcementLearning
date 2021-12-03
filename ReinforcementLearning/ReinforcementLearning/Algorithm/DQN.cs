@@ -14,6 +14,7 @@ namespace ReinforcementLearning.Algorithm
     {
         private double _learningRate;
         private double _discountFactor;
+        private const int TRAINING_TIME=1;
         private INeuralNetwork neuralNetwork;
 
         /// <summary>
@@ -56,15 +57,16 @@ namespace ReinforcementLearning.Algorithm
             double evaluateQ = neuralNetwork.GetResult(currentState)[(int)action];
             List<double> nextResults = neuralNetwork.GetResult(nextState);
             double targetQ = reward + _discountFactor * (isTerminal ? 1 : nextResults[MaxArg(nextResults)]);
-            newQ = Math.Pow( evaluateQ + _learningRate * (targetQ - evaluateQ),2);
+            newQ = Math.Pow(evaluateQ +  _learningRate * (targetQ - evaluateQ),2);//Todo:這裡沒問題嗎
             List<double> labels = new List<double>();
             for (int i = 0; i < DiscreteActionSpace.Length; i++)
             {
                 labels.Add(0);
             }
-            labels[(int)action] = newQ;
+            labels[(int)action] = newQ;//Todo:這樣是在Train loss嗎?
             neuralNetwork.SetTrainingData(new List<List<double>>() { currentState }, new List<List<double>>() { labels });
-            neuralNetwork.StartTrain(1);
+            neuralNetwork.StartTrain(TRAINING_TIME);
+            //Console.WriteLine(newQ);
             return newQ;
 
 

@@ -17,15 +17,16 @@ namespace ReinforcementLearning
         DiscreteActionSpace.Action ChooseAction(State currentState);
 
         /// <summary>
-        /// 透過獎勵學習
+        /// 透過狀態轉移的獎勵學習
         /// </summary>
         /// <param name="currentState">當前狀態</param>
         /// <param name="action">動作</param>
         /// <param name="nextState">下一個狀態</param>
         /// <param name="reward">獎勵</param>
         /// <returns>Q值</returns>
+        //double Learn(Transition transition);
         double Learn(State currentState, DiscreteActionSpace.Action action, State nextState, double reward, bool isTerminal);
-        
+
         /// <summary>
         /// 在當下的狀態中選出一個動作
         /// </summary>

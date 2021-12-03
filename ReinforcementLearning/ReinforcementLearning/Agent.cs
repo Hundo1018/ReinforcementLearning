@@ -10,9 +10,10 @@ namespace ReinforcementLearning
     {
         //public delegate State Transition();
         public State CurrentState { get; set; }
-        public int BatchSize { get; set; }
-        private ILearningAlgorithm _learningAlgorithm;
-        List<Memory> batchMemories = new List<Memory>();
+        public int BatchSize { get; set; }//一次採樣多少筆來學習
+        public int MemorySize { get; set; }//每次最多存多少筆資料
+        public Memory Memory { get; set; } = new Memory();//記憶
+        private readonly ILearningAlgorithm _learningAlgorithm;
         public Agent(ILearningAlgorithm learningAlgorithm)
         {
             _learningAlgorithm = learningAlgorithm;
@@ -26,67 +27,36 @@ namespace ReinforcementLearning
         {
             return _learningAlgorithm.ChooseAction(CurrentState, epsilon);
         }
-        /// <summary>
-        /// 將狀態轉移的記憶紀錄下來
-        /// </summary>
-        /// <param name="memory"></param>
-        public void Record(Memory memory)
-        {
-            //這裡應該要使用樹或heap加入並排序重要性，而不是直接加入list
-            batchMemories.Add(memory);
-            Forget();
-        }
-        /// <summary>
-        /// 檢查記憶中是否包含某狀態
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        public bool IsContainMemory(State state)
-        {
-            bool result = false;
-            for (int i = 0; i < batchMemories.Count - 1; i++)
-            {
-                result = batchMemories[i].State0 == state || batchMemories[i].State1 == state;
-                if (result)
-                    return result;
-            }
-            return result;
-        }
 
-        /// <summary>
-        /// 忘掉多餘的記憶
-        /// </summary>
-        private void Forget()
-        {
-            //這裡應該要把不重要的去掉，而不是只刪頭
-            if (batchMemories.Count > BatchSize)
-                batchMemories.RemoveAt(0);
-        }
-
+        
         /// <summary>
         /// 學習，更新參數
         /// </summary>
         public void Learn()
         {
-            if (batchMemories.Count < BatchSize)
+            //連batch都不夠取就不train
+            if (Memory.MemorySize < BatchSize)
                 return;
-
-            Random random = new Random();
-            /*for (int i = 0; i < batchMemories.Count; i++)
-            {
-                int j = random.Next(0, batchMemories.Count);
-                Memory memory = batchMemories[i];
-                batchMemories[i] = batchMemories[j];
-                batchMemories[j] = memory;
-            }*/
             //打亂
-            batchMemories.Sort((x, y) => { return random.Next(); });
-            for (int i = 0; i < batchMemories.Count / 1; i++)
+            Memory.Shuffle();
+            Memory.GetTransitions(BatchSize).ForEach(transition=> 
             {
-                _learningAlgorithm.Learn(batchMemories[i].State0, batchMemories[i].Action, batchMemories[i].State1, batchMemories[i].Reward, batchMemories[i].IsTerminal);
-                
-            }
+                _learningAlgorithm.Learn(
+                    transition.State0,
+                    transition.Action,
+                    transition.State1,
+                    transition.Reward,
+                    transition.IsTerminal);
+            });
+        }
 
+        /// <summary>
+        /// 開始新的一輪
+        /// </summary>
+        public void ResetEpoch(bool isResetMemory)
+        {
+            if (isResetMemory)
+                Memory.Clear();
         }
     }
 }
