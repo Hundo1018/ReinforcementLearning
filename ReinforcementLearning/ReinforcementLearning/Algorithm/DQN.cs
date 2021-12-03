@@ -57,7 +57,8 @@ namespace ReinforcementLearning.Algorithm
             double evaluateQ = neuralNetwork.GetResult(currentState)[(int)action];
             List<double> nextResults = neuralNetwork.GetResult(nextState);
             double targetQ = reward + _discountFactor * (isTerminal ? 1 : nextResults[MaxArg(nextResults)]);
-            newQ = Math.Pow(evaluateQ +  _learningRate * (targetQ - evaluateQ),2);//Todo:這裡沒問題嗎
+            //newQ = Math.Pow(evaluateQ +  _learningRate * (targetQ - evaluateQ),2);//Todo:這裡沒問題嗎
+            newQ = targetQ - evaluateQ;
             List<double> labels = new List<double>();
             for (int i = 0; i < DiscreteActionSpace.Length; i++)
             {

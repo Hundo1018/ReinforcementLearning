@@ -67,6 +67,16 @@ namespace ReinforcementLearning
                    EqualityComparer<Matrix>.Default.Equals(_value, state._value);
         }
 
+        static public bool operator==(State l,State r)
+        {
+            return l.Equals(r);
+        }
+
+        static public bool operator !=(State l, State r)
+        {
+            return !l.Equals(r);
+        }
+
         /// <summary>
         /// 取得雜湊值
         /// </summary>

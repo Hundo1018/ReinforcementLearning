@@ -33,6 +33,14 @@ namespace ReinforcementLearning.Tests
         }
 
         [TestMethod()]
+        public void EqualsTest2()
+        {
+            State state = new State(1, 1);
+            State state1 = new State(1, 1);
+            Assert.AreEqual(true, state==state1);
+        }
+
+        [TestMethod()]
         public void GetHashCodeTest()
         {
             State state = new State(2, 2);
